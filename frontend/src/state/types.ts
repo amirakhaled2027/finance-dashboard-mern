@@ -31,4 +31,31 @@ export interface GetKpisResponse {
     expensesByCategory: ExpensesByCategory;
     monthlyData: Array<Month>;
     dailyData: Array<Day>;
+    //TIME STAMPS
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface GetProductsResponse {
+    id: string;
+    _id: string;
+    __v: number;
+    price: number;
+    expense: number;
+    transactions: Array<string>; //the transactions includes an array of object ids which are strings (in the data.js file)
+    //TIME STAMPS
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface GetTransactionsResponse {
+    id: string;
+    _id: string;
+    __v: number;
+    buyer: string;
+    amount: number;
+    productIds: Array<string>; //the transactions includes an array of object ids which are strings (in the data.js file)
+    //TIME STAMPS
+    createdAt: string;
+    updatedAt: string;
 }

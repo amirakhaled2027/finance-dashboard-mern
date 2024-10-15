@@ -3,7 +3,7 @@
 
 //Creating our boilerplate for redux toolkit query
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { GetKpisResponse } from "./types";
+import { GetKpisResponse, GetProductsResponse, GetTransactionsResponse } from "./types";
 
 //we're using createApi so it will allow us to make endpoints that we can use to call our backend
 //so we can grab data from our backend using this particular setup 
@@ -18,15 +18,35 @@ export const api = createApi({
     reducerPath: "main",
 
     // these wha's being used to keep information, and this is the name for each api data
-    tagTypes: ['Kpis'],
+    tagTypes: ['Kpis', 'Products', 'Transactions'],
 
     //this is we actually create our api calls
     endpoints: (build) => ({
         getKpis: build.query<Array<GetKpisResponse>, void>({  //when you create these queries you're just wanna pass in <void, void> so that we don't really need any arguments for now but we'll add them eventually
-            query: () => "kpi/kpis",
+            query: () => "kpi/kpis/",
             providesTags: ['Kpis']
-        })
+        }),
+        getProducts: build.query<Array<GetProductsResponse>, void>({  //when you create these queries you're just wanna pass in <void, void> so that we don't really need any arguments for now but we'll add them eventually
+            query: () => "product/products/",
+            providesTags: ['Products']
+        }),
+        //when you get the product, wou get the full list of the product(LIKE ABOVE), 
+        //BUT when you delete it, what happens is you have to delete it in the database, but you also have to delete it in the frontend
+        //This kinda of a hassle coz you have to either tell your backend team to tell you:
+        //I need the updated list of the product, so either your backend team will have to send you the correct information
+        //or you have to do it yourself 
+        //SO instead of that redux toolkit query can give you an option that when you delete something 
+        // in the product section you don't have to worry about getting the updated list
+        //it'll automatically recall the products list anytime you call the next code on any kind of query
+        // deleteProduct:
+        // invalidTags: ['Products']
+
+
+        getTransactions: build.query<Array<GetTransactionsResponse>, void>({  //when you create these queries you're just wanna pass in <void, void> so that we don't really need any arguments for now but we'll add them eventually
+            query: () => "transaction/transactions/",
+            providesTags: ['Transactions']
+        }),
     })
 });
 
-export const {  useGetKpisQuery } = api
+export const {  useGetKpisQuery, useGetProductsQuery, useGetTransactionsQuery } = api
