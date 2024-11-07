@@ -1,66 +1,74 @@
 import BoxHeader from "@/components/BoxHeader";
-import DashboardBox from "@/components/DashboardBox"
-import { useGetKpisQuery } from "@/state/api"
+import DashboardBox from "@/components/DashboardBox";
+import { useGetKpisQuery } from "@/state/api";
 import { useTheme } from "@mui/material";
 import { useMemo } from "react";
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 
 function Row1() {
   const { palette } = useTheme();
-  //data: which gonna be the result that we get
-  //it's not gonna call anything coz we're not hitting our endpoint that doesn't exist
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { data } = useGetKpisQuery();
-  
-  //configuring our data into the proper format as needed
-  //we need this function to only run as needed and use memo is perfect for that
-  //what this is essentially doing is that we only wanna run this function only when data changes
-  const revenueExpenses= useMemo(() => {
+
+  //configuring the data into the proper format as needed (only when data changes)
+  const revenueExpenses = useMemo(() => {
     return (
-      data && //we wanna make sure that the data exist
+      data && //making sure that the data exist
       data[0].monthlyData.map(({ month, revenue, expenses }) => {
         return {
-          name: month.substring(0, 3),  //the substring will grab the first three letter of each month, so it's a shortened version of the name of the month
+          name: month.substring(0, 3),
           revenue: revenue,
           expenses: expenses,
-        }
-      }) //and if it does, we wanna grab the first element of the array (coz that's the first object), and we just wanna the monthly data fot this particular chart
+        };
+      })
     );
   }, [data]);
 
-
-  const revenueProfit= useMemo(() => {
+  const revenueProfit = useMemo(() => {
     return (
-      data && //we wanna make sure that the data exist
+      data && //making sure that the data exist
       data[0].monthlyData.map(({ month, revenue, expenses }) => {
         return {
-          name: month.substring(0, 3),  //the substring will grab the first three letter of each month, so it's a shortened version of the name of the month
+          name: month.substring(0, 3),
           revenue: revenue,
           profit: (revenue - expenses).toFixed(2),
-        }
-      }) //and if it does, we wanna grab the first element of the array (coz that's the first object), and we just wanna the monthly data fot this particular chart
+        };
+      })
     );
   }, [data]);
 
-
-  const revenue= useMemo(() => {
+  const revenue = useMemo(() => {
     return (
-      data && //we wanna make sure that the data exist
+      data && //making sure that the data exist
       data[0].monthlyData.map(({ month, revenue }) => {
         return {
-          name: month.substring(0, 3),  //the substring will grab the first three letter of each month, so it's a shortened version of the name of the month
+          name: month.substring(0, 3),
           revenue: revenue,
-        }
-      }) //and if it does, we wanna grab the first element of the array (coz that's the first object), and we just wanna the monthly data fot this particular chart
+        };
+      })
     );
   }, [data]);
+
   return (
     <>
+      {/* FIRST BOX */}
       <DashboardBox gridArea="a">
         <BoxHeader
           title="Revenue & Expenses"
           subtitle="top line represents revenue, bottom line represents expenses"
-          sideText="+4%"
+          sideText="+7%"
         />
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
@@ -133,12 +141,12 @@ function Row1() {
         </ResponsiveContainer>
       </DashboardBox>
 
-      {/* Second Box */}
+      {/* SECOND BOX */}
       <DashboardBox gridArea="b">
         <BoxHeader
           title="Profit & Revenue"
           subtitle="top line represents revenue, bottom line represents expenses"
-          sideText="+4%"
+          sideText="+13%"
         />
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
@@ -197,7 +205,7 @@ function Row1() {
         <BoxHeader
           title="Revenue Month By Month"
           subtitle="graph representing the revenue month by month"
-          sideText="+4%"
+          sideText="+5%"
         />
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
@@ -212,7 +220,7 @@ function Row1() {
             }}
           >
             <defs>
-            <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
                   stopColor={palette.primary[300]}
@@ -238,10 +246,7 @@ function Row1() {
               style={{ fontSize: "10px" }}
             />
             <Tooltip />
-            <Bar
-              dataKey="revenue"
-              fill="url(#colorRevenue)"
-            />
+            <Bar dataKey="revenue" fill="url(#colorRevenue)" />
           </BarChart>
         </ResponsiveContainer>
       </DashboardBox>
@@ -249,4 +254,4 @@ function Row1() {
   );
 }
 
-export default Row1
+export default Row1;

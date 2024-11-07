@@ -1,113 +1,50 @@
 import BoxHeader from "@/components/BoxHeader";
-import DashboardBox from "@/components/DashboardBox"
+import DashboardBox from "@/components/DashboardBox";
 import FlexBetween from "@/components/FlexBetween";
-import { useGetKpisQuery, useGetProductsQuery } from "@/state/api"
+import { useGetProductsQuery } from "@/state/api";
 import { Box, Typography, useTheme } from "@mui/material";
 import { useMemo } from "react";
-import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Tooltip, Line, Legend, Cell, Pie, PieChart, Scatter, ScatterChart, ZAxis } from "recharts";
+import {
+  ResponsiveContainer,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Cell,
+  Pie,
+  PieChart,
+  Scatter,
+  ScatterChart,
+  ZAxis,
+} from "recharts";
 
 const pieData = [
-  { name: 'Group A', value: 600 },
-  { name: 'Group B', value: 400 },
-]
+  { name: "Group A", value: 600 },
+  { name: "Group B", value: 400 },
+];
 function Row2() {
   const { palette } = useTheme();
   const pieColors = [palette.primary[800], palette.primary[300]];
-  const { data: operationalData } = useGetKpisQuery();
-  const { data: productData  } = useGetProductsQuery();
-  
+  const { data: productData } = useGetProductsQuery();
 
-  const _operationalExpenses= useMemo(() => {
+  const productExpenseData = useMemo(() => {
     return (
-      operationalData && 
-      operationalData[0].monthlyData.map(({ month, operationalExpenses, nonOperationalExpenses }) => {
-        return {
-          name: month.substring(0, 3), 
-          "Operational Expenses": operationalExpenses,
-          "Non-Operational Expenses": nonOperationalExpenses,
-        }
-      })
-    );
-  }, [operationalData]);
-
-
-  const productExpenseData= useMemo(() => {
-    return (
-      productData && 
+      productData &&
       productData.map(({ _id, price, expense }) => {
         return {
           id: _id,
           price: price,
           expense: expense,
-        }
+        };
       })
     );
   }, [productData]);
-  
+
   return (
     <>
       {/* FIRST BOX */}
       <DashboardBox gridArea="d">
-        <BoxHeader
-          title="Operational vs Non-Operational Expenses"
-          sideText="+4%"
-        />
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={_operationalExpenses}
-            margin={{
-              top: 20,
-              right: 0,
-              left: -10,
-              bottom: 55,
-            }}
-          >
-            <CartesianGrid vertical={false} stroke={palette.grey[800]} />
-            <XAxis
-              dataKey="name"
-              tickLine={false}
-              style={{ fontSize: "10px" }}
-            />
-            <YAxis
-              yAxisId="left"
-              orientation="left"
-              tickLine={false}
-              axisLine={false}
-              style={{ fontSize: "10px" }}
-            />
-            <YAxis
-              yAxisId="right"
-              orientation="right"
-              tickLine={false}
-              axisLine={false}
-              style={{ fontSize: "10px" }}
-            />
-            <Tooltip />
-            <Legend
-              height={20}
-              wrapperStyle={{
-                margin: "0 0 10px 0",
-              }}
-            />
-            <Line
-              yAxisId="left"
-              type="monotone"
-              dataKey="Non Operational Expenses"
-              stroke={palette.tertiary[500]}
-            />
-            <Line
-              yAxisId="right"
-              type="monotone"
-              dataKey="Operational Expenses"
-              stroke={palette.primary.main}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </DashboardBox>
-
-      {/* SECOND BOX */}
-      <DashboardBox gridArea="e">
-        <BoxHeader title="Campaigns & Targets" sideText="+4%" />
+        <BoxHeader title="Campaigns & Targets" sideText="+25%" />
         <FlexBetween>
           <PieChart
             width={110}
@@ -154,9 +91,9 @@ function Row2() {
         </FlexBetween>
       </DashboardBox>
 
-      {/* THIRD BOX: SCATTER PLOT */}
-      <DashboardBox gridArea="f">
-        <BoxHeader title="Product Prices vs Expenses" sideText="+4%" />
+      {/* SECOND BOX: SCATTER PLOT */}
+      <DashboardBox gridArea="e">
+        <BoxHeader title="Product Prices vs Expenses" sideText="+19%" />
         <ResponsiveContainer width="100%" height="100%">
           <ScatterChart
             margin={{
@@ -168,16 +105,13 @@ function Row2() {
           >
             <CartesianGrid stroke={palette.grey[800]} />
             <XAxis
-              //the data key represents what we're saving into the data
-              //the name of the price is shown in the tooltip when you hover on the data on the grid
               type="number"
               dataKey="price"
               name="price"
               axisLine={false}
               tickLine={false}
               style={{ fontSize: "10px" }}
-              tickFormatter={(v) => `$${v}`} //The tick formatter is basically gonna grab the number we have on the text for the x-axis and we can reformat that data into a format that we want
-              //we're gonna grab the current value (v) and we'll pass it in, then we're gonna add a dollar sign up front
+              tickFormatter={(v) => `$${v}`}  //The tick formatter is gonna grab the number we have on the text for the x-axis and I can reformat that data into the format that I want
             />
             <YAxis
               type="number"
@@ -203,4 +137,4 @@ function Row2() {
   );
 }
 
-export default Row2
+export default Row2;

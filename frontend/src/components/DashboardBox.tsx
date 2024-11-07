@@ -2,8 +2,6 @@ import { Box } from "@mui/material";
 import { styled } from "@mui/system";
  
 
-
-//this is the basic syntax if you wanna a style component
 const DashboardBox = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.background.light,
     borderRadius: '1rem',
